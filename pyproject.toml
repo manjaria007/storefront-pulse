@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "storefront-pulse"
+version = "0.1.0"
+description = "Turn a small business's Ring camera into foot-traffic and operations insight, served to Alexa+ over MCP."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+dependencies = [
+  "mcp>=1.27,<2",          # speaks MCP spec 2025-11-25, Streamable HTTP
+  "fastapi>=0.115",
+  "uvicorn>=0.30",
+  "httpx>=0.27",
+  "pydantic>=2.7",
+  "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+aws = ["boto3>=1.35"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+pulse-ingest = "storefront_pulse.ingest.app:main"
+pulse-mcp = "storefront_pulse.mcp_server:main"
+pulse-sim = "storefront_pulse.simulator.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/storefront_pulse"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
